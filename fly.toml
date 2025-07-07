@@ -1,4 +1,4 @@
-app = "austin-hybrid-receptionist"
+app = "Frontdesk_AI_-POC"
 primary_region = "dfw"  # Dallas, close to Austin
 
 [build]
