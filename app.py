@@ -20,7 +20,7 @@ with open('knowledge_base.txt', 'r') as f:
 
 def process_with_llm(message):
     """Call external LLM API (e.g., local server or Hugging Face)."""
-    llm_url = os.environ.get('LLM_API_URL', 'https://moral-legible-griffon.ngrok-free.app:8000/process')  # Replace with ngrok URL
+    llm_url = os.environ.get('LLM_API_URL', 'https://2970-35-227-126-138.ngrok-free.app/process')  # Replace with ngrok URL
     try:
         response = requests.post(llm_url, json={'message': message, 'knowledge_base': knowledge_base})
         return response.json().get('response', 'Sorry, I couldn’t process your request.')
@@ -29,7 +29,7 @@ def process_with_llm(message):
 
 def transcribe_recording(recording_url):
     """Call external Whisper API for speech-to-text."""
-    whisper_url = os.environ.get('WHISPER_API_URL', 'https://moral-legible-griffon.ngrok-free.app:8000/transcribe')
+    whisper_url = os.environ.get('WHISPER_API_URL', 'https://2970-35-227-126-138.ngrok-free.app/transcribe')
     try:
         response = requests.post(whisper_url, json={'recording_url': recording_url})
         return response.json().get('transcription', 'Sorry, I couldn’t transcribe the audio.')
@@ -38,7 +38,7 @@ def transcribe_recording(recording_url):
 
 def text_to_speech(text):
     """Call external gTTS API for text-to-speech."""
-    tts_url = os.environ.get('TTS_API_URL', 'https://moral-legible-griffon.ngrok-free.app:8000/tts')
+    tts_url = os.environ.get('TTS_API_URL', 'https://2970-35-227-126-138.ngrok-free.app/tts')
     try:
         response = requests.post(tts_url, json={'text': text})
         audio_url = response.json().get('audio_url')
