@@ -1,9 +1,6 @@
 app = "frontdesk-ai--poc"
 primary_region = "dfw"
 
-[build]
-  dockerfile = "Dockerfile"
-
 [env]
   PORT = "8000"
 
