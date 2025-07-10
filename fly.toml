@@ -1,4 +1,4 @@
-app = "frontdesk-ai_-poc"
+app = "frontdesk-ai--poc"
 primary_region = "dfw"
 
 [build]
