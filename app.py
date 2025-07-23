@@ -3,11 +3,10 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.twiml.voice_response import VoiceResponse
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-import openai
 import os
 import openai
 from io import BytesIO
-import dateparser
+from dateutil import parser
 from datetime import timedelta
 import requests
 
@@ -23,11 +22,7 @@ calendar_service = build('calendar', 'v3', credentials=credentials)
 with open('knowledge_base.txt', 'r') as f:
     knowledge_base = f.read()
 
-<<<<<<< HEAD
 openai.api_key = os.environ.get("OPENAI_API_KEY")
-=======
-openai.api_key = os.environ.get('OPENAI_API_KEY')
->>>>>>> b67221c6db8161810f7a38f89907ebdb2c39cc02
 
 def process_with_llm(message):
     try:
@@ -40,12 +35,8 @@ def process_with_llm(message):
         )
         return response.choices[0].message.content
     except Exception as e:
-<<<<<<< HEAD
         print("OpenAI Exception:", str(e))
         return f"Error contacting LLM: {str(e)}"
-=======
-        return f"Error with LLM: {str(e)}"
->>>>>>> b67221c6db8161810f7a38f89907ebdb2c39cc02
 
 
 def transcribe_recording(recording_url):
@@ -75,9 +66,10 @@ def text_to_speech(text):
         return f"Error generating speech: {str(e)}"
 
 def handle_appointment(message):
-    parsed_date = dateparser.parse(message, settings={'PREFER_DATES_FROM': 'future'})
-    if not parsed_date:
-        return "Please specify a date and time for the appointment."
+    try:
+        parsed_date = parser.parse(message, fuzzy=True)
+    except Exception:
+        return "Please specify a valid date and time for the appointment."
     start_time = parsed_date.isoformat()
     end_time = (parsed_date + timedelta(hours=1)).isoformat()
     event = {
