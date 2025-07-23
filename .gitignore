@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 service_account.json
+austin-hybrid-receptionist-aa8eaffad54b.json
 static/*.mp3
 
 # C extensions
