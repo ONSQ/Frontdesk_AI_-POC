@@ -4,8 +4,11 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.twiml.voice_response import VoiceResponse
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+import openai
 import os
 
+print("OPENAI_API_KEY loaded is:", os.environ.get("OPENAI_API_KEY"))
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 app = Flask(__name__)
 
 # Google Calendar API setup
@@ -18,14 +21,22 @@ calendar_service = build('calendar', 'v3', credentials=credentials)
 with open('knowledge_base.txt', 'r') as f:
     knowledge_base = f.read()
 
+openai.api_key = os.environ.get("OPENAI_API_KEY")
+
 def process_with_llm(message):
-    """Call external LLM API (e.g., local server or Hugging Face)."""
-    llm_url = os.environ.get('LLM_API_URL', 'https://2970-35-227-126-138.ngrok-free.app/process')  # Replace with ngrok URL
     try:
-        response = requests.post(llm_url, json={'message': message, 'knowledge_base': knowledge_base})
-        return response.json().get('response', 'Sorry, I couldn’t process your request.')
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": f"Knowledge base: {knowledge_base}\nYou are a helpful receptionist for Austin Hybrid Battery."},
+                {"role": "user", "content": message}
+            ]
+        )
+        return response.choices[0].message.content
     except Exception as e:
+        print("OpenAI Exception:", str(e))
         return f"Error contacting LLM: {str(e)}"
+
 
 def transcribe_recording(recording_url):
     """Call external Whisper API for speech-to-text."""
